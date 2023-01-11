@@ -3,7 +3,7 @@ const config = require("../config/config")["development"]; // 배포시 수정�
 
 const user = require("./user");
 const kospi = require("./kospi");
-// const fooddata = require("./fooddata");
+const kospiIndex = require("./kospiIndex");
 
 // node와 mySql연결
 const sequelize = new Sequelize(
@@ -19,6 +19,7 @@ const sequelize = new Sequelize(
 const db = {};
 db.User = user;
 db.Kospi = kospi;
+db.KospiIndex = kospiIndex;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);
