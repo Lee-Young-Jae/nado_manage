@@ -30,7 +30,13 @@ const WraaperStyle = styled.div`
   justify-content: left;
   border-bottom: ${({ theme }) => theme.border.DEFAULT};
   width: 280px;
-  margin: 10px auto;
+  margin: 10px 0;
+
+  background-color: #f8fafe;
+  height: 48px;
+  width: 306px;
+  border-radius: 10px;
+  border: 1px solid #395ad9;
 `;
 
 const LabeledInputStyle = styled.div`
@@ -62,7 +68,13 @@ const LabelStyle = styled.label`
       `
     );
   }}
-  cursor: pointer;
+  color: #d3d3d3;
+  font-size: 16px;
+  font-family: Noto Sans KR;
+  line-height: auto;
+  border-style: hidden;
+  outline: none;
+  margin-left: 10px;
 `;
 
 const InputStyle = styled(TextInput)`
@@ -76,6 +88,7 @@ const InputStyle = styled(TextInput)`
   padding: 0;
   margin: 0;
   border: none;
+  background-color: #f8fafe;
 `;
 
 const ChildrenStyle = styled.div`
