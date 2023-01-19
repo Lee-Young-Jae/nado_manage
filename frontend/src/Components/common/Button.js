@@ -42,7 +42,7 @@ const sizes = {
   },
 
   large: {
-    height: "2.5rem",
+    height: "48px",
     fontSize: css`
       ${({ theme }) => theme.fontSize.LARGE}
     `,
@@ -71,12 +71,14 @@ const StyledButton = styled.button`
   color: white;
   outline: none;
   border: none;
-  border-radius: 16px;
+  border-radius: 10px;
   padding: 0 1rem;
-  font-size: 1rem;
+  font-size: 20px;
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
+  font-weight: lighter;
+  font-family: "Noto Sans KR";
 
   /* 크기 */
   ${sizeStyles}
