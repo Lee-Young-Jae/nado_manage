@@ -19,11 +19,11 @@ router.get("/list/:stockName", async (req, res) => {
     },
   });
 
-  if (kospi.length === 0) {
-    return res
-      .status(404)
-      .send("해당하는 이름의 주식이 없네요...😰 다시 검색해주세요.");
-  }
+  // if (kospi.length === 0) {
+  //   return res
+  //     .status(404)
+  //     .send("해당하는 이름의 주식이 없네요...😰 다시 검색해주세요.");
+  // }
 
   res.status(201).send(kospi);
 });
