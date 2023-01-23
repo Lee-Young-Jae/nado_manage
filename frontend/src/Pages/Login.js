@@ -5,6 +5,51 @@ import { USER_LOGIN_REQUEST } from "../modules/reducers/user";
 import Button from "../Components/common/Button";
 import { Link, useNavigate } from "react-router-dom";
 import Dialog from "../Components/common/Dialog";
+import styled from "styled-components";
+import hamberger from "../Icons/hamberger.png";
+import Flex from "../Components/common/Flex";
+
+const LoginPageStyle = styled.div`
+  padding: 2rem;
+`;
+const SubTitle = styled.div`
+  color: #395ad9;
+  text-align: left;
+  vertical-align: text-middle;
+  font-size: 19px;
+  font-family: Noto Sans KR;
+  line-height: auto;
+  border-style: hidden;
+  outline: none;
+  left: 83px;
+  top: 147px;
+  width: 242px;
+`;
+
+const SubContentLink = styled(Link)`
+  color: #b5b5b5;
+  text-align: right;
+  vertical-align: text-middle;
+  font-size: 12px;
+  font-family: Noto Sans KR;
+  line-height: auto;
+  border-style: hidden;
+  outline: none;
+  // 링크 스타일 제거
+  text-decoration: none;
+  cursor: pointer;
+  margin-right: 5px;
+`;
+
+const HambergerImg = styled.img.attrs({ src: `${hamberger}` })`
+  width: 20px;
+  height: 20px;
+  border-style: hidden;
+  outline: none;
+  object-fit: contain;
+  cursor: pointer;
+  margin-right: 12px;
+`;
 
 const Login = () => {
   const [loginInfo, setLoginInfo] = useState({
@@ -61,7 +106,11 @@ const Login = () => {
   }, [me, navigate]);
 
   return (
-    <div>
+    <LoginPageStyle>
+      <Flex align="center">
+        <HambergerImg></HambergerImg>
+        <SubTitle>로그인/인증방법</SubTitle>
+      </Flex>
       <LabeledInput
         labelText="아이디"
         inputType="text"
@@ -76,13 +125,15 @@ const Login = () => {
         name="password"
         onChange={onChange}
       />
-      <Button size="large" onClick={onSubmit}>
+      <Button fullWidth size="large" onClick={onSubmit}>
         로그인
       </Button>
 
-      <Link to="/signup">
-        <Button size="large">회원가입</Button>
-      </Link>
+      <Flex justify="flex-end">
+        <SubContentLink to="/signup">회원가입</SubContentLink>
+        <SubContentLink to="/signup">/ 아이디</SubContentLink>
+        <SubContentLink to="/signup">/ 비밀번호 찾기</SubContentLink>
+      </Flex>
 
       <Dialog
         onConfirm={() => {
@@ -100,7 +151,7 @@ const Login = () => {
       >
         {dialogMessage}
       </Dialog>
-    </div>
+    </LoginPageStyle>
   );
 };
 
