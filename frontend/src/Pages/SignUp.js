@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import Button from "../Components/common/Button";
 import Dialog from "../Components/common/Dialog";
 import LabeledInput from "../Components/Patterns/LabeledInput";
 import { USER_SIGNUP_REQUEST } from "../modules/reducers/user";
+
+const SignupPageStyle = styled.div`
+  padding: 2rem;
+`;
 
 const SignUpPage = () => {
   const [signupInfo, setSignupInfo] = useState({
@@ -14,10 +19,10 @@ const SignUpPage = () => {
   });
 
   const [dialog, setDialog] = useState(false);
-  const [dialogMessage, setDialogMessage] = {
+  const [dialogMessage, setDialogMessage] = useState({
     title: "회원가입 실패",
     content: "회원가입에 실패했습니다.",
-  };
+  });
 
   const dispatch = useDispatch();
 
@@ -45,7 +50,7 @@ const SignUpPage = () => {
   };
 
   const navigate = useNavigate();
-  useState(() => {
+  useEffect(() => {
     if (signUpError) {
       setDialog(true);
       setDialogMessage({ ...dialogMessage, content: signUpError });
@@ -57,16 +62,16 @@ const SignUpPage = () => {
         title: "회원가입 성공✨",
         content: "회원가입에 성공했습니다.",
       });
+      navigate("/login");
     }
 
     if (me?.id) {
       navigate("/stock");
     }
-  }, [signUpError, signUpDone]);
+  }, [signUpError, signUpDone, me]);
 
   return (
-    <>
-      <h1>간단 회원가입</h1>
+    <SignupPageStyle>
       <LabeledInput
         labelText="아이디"
         inputType="text"
@@ -89,10 +94,20 @@ const SignUpPage = () => {
         onChange={onChangeSignup}
       />
       <Button onClick={onSubmitSignup}>회원가입</Button>
-      <Dialog visible={dialog} title={dialogMessage.title}>
+      <Dialog
+        onlyConfirm
+        visible={dialog}
+        title={dialogMessage.title}
+        onCancel={() => {
+          setDialog(false);
+        }}
+        onConfirm={() => {
+          setDialog(false);
+        }}
+      >
         {dialogMessage.content}
       </Dialog>
-    </>
+    </SignupPageStyle>
   );
 };
 
