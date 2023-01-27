@@ -13,6 +13,7 @@ import IsLogin from "../Components/Patterns/IsLogin";
 import { getCommaString } from "../Utils/common";
 
 import Flex from "../Components/common/Flex";
+import Loading from "../Components/common/Loading";
 
 const StockStyle = styled.div``;
 
@@ -77,6 +78,16 @@ const ChartWrapper = styled.div`
   background-color: #f8fafe;
   border-radius: 13px;
   border: 1px solid #dbdfe8;
+  transition: 0.5s;
+`;
+
+const SearchGuide = styled.div`
+  margin: 0 auto;
+  font-size: 14px;
+  border-top: 1px solid #dee2e6;
+  text-align: center;
+  padding: 10px 0;
+  color: #adb5bd;
 `;
 
 const Stock = () => {
@@ -84,6 +95,7 @@ const Stock = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { search_stock, detail_stock } = useSelector((state) => state.stock);
+  const { loadStockLoading } = useSelector((state) => state.stock.state);
 
   const searchStock = useCallback(
     (e) => {
@@ -97,7 +109,6 @@ const Stock = () => {
 
   const onClickStockItem = useCallback(
     (item) => {
-      console.log(item);
       dispatch({
         type: LOAD_STOCK_REQUEST,
         data: {
@@ -158,7 +169,6 @@ const Stock = () => {
 
   const getSharpRatio = (stocksClosePrice) => {
     const dailyClosingPrice = stocksClosePrice.slice(0, 31);
-    console.log(dailyClosingPrice);
 
     let dailyReturn = dailyClosingPrice.map((item, index) => {
       if (index === dailyClosingPrice.length - 1) {
@@ -168,8 +178,6 @@ const Stock = () => {
     });
 
     dailyReturn = dailyReturn.slice(0, 30);
-
-    console.log(dailyReturn);
 
     // standard deviation Sample version
     const getStandardDeviation = (arr, usePopulation = false) => {
@@ -192,7 +200,6 @@ const Stock = () => {
 
   const getFluctuationRange = (stocksClosePrice) => {
     const dailyClosingPrice = stocksClosePrice.slice(0, 31);
-    console.log(dailyClosingPrice);
 
     let dailyReturn = dailyClosingPrice.map((item, index) => {
       if (index === dailyClosingPrice.length - 1) {
@@ -202,8 +209,6 @@ const Stock = () => {
     });
 
     dailyReturn = dailyReturn.slice(0, 30);
-
-    console.log(dailyReturn);
 
     // standard deviation Sample version
     const getStandardDeviation = (arr, usePopulation = false) => {
@@ -282,84 +287,98 @@ const Stock = () => {
           <p>{detail_stock.length}일 동안의 검색 결과가 있습니다.</p>
         )}
       </SearchFormWrapper>
-
-      <StockInfo>
-        <Flex justify="space-between" grow="1">
-          <div>
-            <Flex justify="space-between">
-              <SubText>{detail_stock[0]?.srtnCd}</SubText>
-              <SubText>KOSPI</SubText>
+      {detail_stock?.length === 0 ? (
+        <>
+          <SearchGuide>
+            원하시는 종목을 검색해 분석 결과를 받아보세요!
+          </SearchGuide>
+          {loadStockLoading && <Loading />}
+        </>
+      ) : (
+        <>
+          <StockInfo>
+            <Flex justify="space-between" grow="1">
+              <div>
+                <Flex justify="space-between">
+                  <SubText>{detail_stock[0]?.srtnCd}</SubText>
+                  <SubText>KOSPI</SubText>
+                </Flex>
+                <h2>
+                  {detail_stock[0]?.clpr
+                    ? getCommaString(detail_stock[0]?.clpr)
+                    : 0}
+                </h2>
+              </div>
+              <div>
+                <Button size="small">SharpRatio</Button>
+                <p>{sharpRatio.toFixed(2)}</p>
+              </div>
             </Flex>
-            <h2>
-              {detail_stock[0]?.clpr
-                ? getCommaString(detail_stock[0]?.clpr)
-                : 0}
-            </h2>
-          </div>
-          <div>
-            <Button size="small">SharpRatio</Button>
-            <p>{sharpRatio.toFixed(2)}</p>
-          </div>
-        </Flex>
-      </StockInfo>
+          </StockInfo>
+          {loadStockLoading && <Loading />}
+          <ChartWrapper>
+            <StockChart
+              valueAtRisk={valueAtRisk}
+              sharpRatio={sharpRatio}
+              fluctuationRange={fluctuationRange}
+            ></StockChart>
+          </ChartWrapper>
+          <br />
+          <Analysis>
+            <Flex margin="0 0 0 14px">
+              <h3>종목분석</h3>
+            </Flex>
+            <Flex margin="0 14px" justify="space-between">
+              <p>5% VaR</p>
+              <p>
+                {detail_stock[0]?.clpr
+                  ? `${(
+                      Number(valueAtRisk.ninetyFivePercent) /
+                      (Number(detail_stock[0]?.clpr) / 100)
+                    ).toFixed(2)}%`
+                  : 0}
+              </p>
+            </Flex>
+            <Flex margin="0 14px" justify="space-between">
+              <p>1% VaR</p>
+              <p>
+                {detail_stock[0]?.clpr
+                  ? `${(
+                      Number(valueAtRisk.onePercent) /
+                      (Number(detail_stock[0]?.clpr) / 100)
+                    ).toFixed(2)}%`
+                  : 0}
+              </p>
+            </Flex>
+            <Flex margin="0 14px" justify="space-between">
+              <p>평균 수익률</p>
+              <p>
+                {detail_stock[0]?.fltRt
+                  ? `${(
+                      detail_stock
+                        .map((item) => {
+                          return Number(item.fltRt);
+                        })
+                        .reduce((a, b) => a + b, 0) / detail_stock.length
+                    ).toFixed(2)}%`
+                  : 0}
+              </p>
+            </Flex>
+          </Analysis>
+          <br />
 
-      <ChartWrapper>
-        <StockChart
-          valueAtRisk={valueAtRisk}
-          sharpRatio={sharpRatio}
-          fluctuationRange={fluctuationRange}
-        ></StockChart>
-      </ChartWrapper>
-      <br />
-      <Analysis>
-        <Flex margin="0 0 0 14px">
-          <h3>종목분석</h3>
-        </Flex>
-        <Flex margin="0 14px" justify="space-between">
-          <p>5%</p>
-          <p>
-            {detail_stock[0]?.clpr
-              ? `${(
-                  Number(valueAtRisk.ninetyFivePercent) /
-                  (Number(detail_stock[0]?.clpr) / 100)
-                ).toFixed(2)}%`
-              : 0}
-          </p>
-        </Flex>
-        <Flex margin="0 14px" justify="space-between">
-          <p>1%</p>
-          <p>
-            {detail_stock[0]?.clpr
-              ? `${(
-                  Number(valueAtRisk.onePercent) /
-                  (Number(detail_stock[0]?.clpr) / 100)
-                ).toFixed(2)}%`
-              : 0}
-          </p>
-        </Flex>
-        <Flex margin="0 14px" justify="space-between">
-          <p>기대 수익률</p>
-          <p>
-            {detail_stock[0]?.clpr
-              ? `${(
-                  Number(valueAtRisk.onePercent) /
-                  (Number(detail_stock[0]?.clpr) / 100)
-                ).toFixed(2)}%`
-              : 0}
-          </p>
-        </Flex>
-      </Analysis>
-      <br />
+          <div
+            style={{
+              margin: "0 15px 15px",
+            }}
+          >
+            <Button fullWidth size="large">
+              관심종목 추가
+            </Button>
+          </div>
+        </>
+      )}
 
-      <div
-        style={{
-          margin: "0 15px 15px",
-        }}
-      >
-        <Button fullWidth size="large">
-          관심종목 추가
-        </Button>
-      </div>
       <Dialog
         visible={isDialogOpen}
         title={<p>주의 !</p>}
