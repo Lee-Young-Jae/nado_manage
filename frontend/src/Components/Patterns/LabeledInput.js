@@ -40,10 +40,8 @@ const WraaperStyle = styled.div`
 `;
 
 const LabeledInputStyle = styled.div`
-  display: flex;
-  align-items: center;
   cursor: pointer;
-
+  margin: 0 auto;
   /** 애니메이션 */
   ${animationStyle}
 
@@ -60,6 +58,7 @@ const LabeledInputStyle = styled.div`
 `;
 
 const LabelStyle = styled.label`
+  position: absolute;
   ${({ noneLabel }) => {
     return (
       noneLabel &&
@@ -85,6 +84,7 @@ const InputStyle = styled(TextInput)`
   &:focus {
     outline: none;
   }
+  text-align: center;
   padding: 0;
   margin: 0;
   border: none;

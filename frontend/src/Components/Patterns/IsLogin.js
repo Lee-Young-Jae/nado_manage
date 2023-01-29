@@ -10,7 +10,9 @@ const IsLogin = () => {
   const { me } = useSelector((state) => state.user);
 
   const [dialog, setDialog] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState("이용하시려는 서비스는 로그인이 필요해요");
+  const [dialogMessage, setDialogMessage] = useState(
+    "이용하시려는 서비스는 로그인이 필요해요"
+  );
   const onConfirm = () => {
     setDialog(false);
     navigate("/login");
@@ -23,7 +25,6 @@ const IsLogin = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(me);
     if (!me?.id) {
       setDialog(true);
     }
