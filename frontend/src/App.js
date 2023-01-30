@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { LOAD_ME_REQUEST } from "./modules/reducers/user";
 import SignUpPage from "./Pages/SignUp";
 import ChartPage from "./Pages/Chart";
+import Interested from "./Pages/Interested";
 
 const App = () => {
   const [dialog, setDialog] = useState(false);
@@ -54,6 +55,10 @@ const App = () => {
               <Route path="/signup" element={<SignUpPage></SignUpPage>}></Route>
               <Route path="/stock" element={<Stock></Stock>}></Route>
               <Route path="/chart" element={<ChartPage></ChartPage>}></Route>
+              <Route
+                path="/interested"
+                element={<Interested></Interested>}
+              ></Route>
             </Routes>
           </AppLayout>
         </BrowserRouter>
