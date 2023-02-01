@@ -58,14 +58,14 @@ const StockChart = ({
     dataZoom: [
       {
         type: "inside",
-        start: 0,
+        start: 98,
         end: 101,
       },
       {
         show: true,
         type: "slider",
         top: "85%",
-        start: 0,
+        start: 98,
         end: 101,
       },
     ],
@@ -158,6 +158,7 @@ const StockChart = ({
             data: [{ type: "max", name: "현재가" }],
             label: {
               formatter: `${detail_stock[0]?.clpr} 현재가`,
+              color: "green",
             },
             animation: false,
           },
@@ -166,9 +167,9 @@ const StockChart = ({
           name: "변동폭",
           symbol: "none",
           data: detail_stock?.map((_, index) => {
-            return (
+            return Math.round(
               Number(detail_stock[0]?.clpr) - Number(fluctuationRange)
-            ).toFixed(2);
+            );
           }),
           type: "line",
           markLine: {
@@ -176,9 +177,32 @@ const StockChart = ({
             symbol: "none",
             data: [{ type: "max", name: "변동폭" }],
             label: {
-              formatter: `${(detail_stock[0]?.clpr - fluctuationRange).toFixed(
-                2
+              formatter: `${Math.round(
+                detail_stock[0]?.clpr - fluctuationRange
               )} 변동폭`,
+              color: "blue",
+            },
+            animation: false,
+          },
+        },
+        {
+          name: "변동폭",
+          symbol: "none",
+          data: detail_stock?.map((_, index) => {
+            return Math.round(
+              Number(detail_stock[0]?.clpr) + Number(fluctuationRange)
+            );
+          }),
+          type: "line",
+          markLine: {
+            silent: true,
+            symbol: "none",
+            data: [{ type: "max", name: "변동폭" }],
+            label: {
+              formatter: `${Math.round(
+                detail_stock[0]?.clpr - fluctuationRange
+              )} 변동폭`,
+              color: "blue",
             },
             animation: false,
           },
@@ -188,9 +212,10 @@ const StockChart = ({
           name: "5% VAR",
           symbol: "none",
           data: detail_stock?.map((_, index) => {
-            return (
-              Number(detail_stock[0]?.clpr) + valueAtRisk.ninetyFivePercent
-            ).toFixed(2);
+            return Math.round(
+              Number(detail_stock[0]?.clpr) +
+                Number(valueAtRisk.ninetyFivePercent)
+            );
           }),
           type: "line",
           markLine: {
@@ -199,9 +224,33 @@ const StockChart = ({
             data: [{ type: "max", name: "5%VAR" }],
             color: "red",
             label: {
-              formatter: `${(
+              formatter: `${Math.round(
                 detail_stock[0]?.clpr - valueAtRisk.ninetyFivePercent
-              ).toFixed(2)} 5% VaR`,
+              )} 5% VaR`,
+              color: "red",
+            },
+            animation: false,
+          },
+        },
+
+        {
+          name: "1% VAR",
+          symbol: "none",
+          data: detail_stock?.map((_, index) => {
+            return Math.round(
+              Number(detail_stock[0]?.clpr) + Number(valueAtRisk.onePercent)
+            );
+          }),
+          type: "line",
+          markLine: {
+            silent: true,
+            symbol: "none",
+            data: [{ type: "max", name: "1%VAR" }],
+            color: "red",
+            label: {
+              formatter: `${Math.round(
+                detail_stock[0]?.clpr - valueAtRisk.onePercent
+              )} 1% VaR`,
               color: "red",
             },
             animation: false,
@@ -300,8 +349,8 @@ const StockChart = ({
         <div>데이터가 없습니다 종목을 검색해서 데이터를 불러보세요</div>
       ) : (
         <>
-          <Button onClick={onClickMonthlyBtn}>월 별</Button>
-          <Button onClick={onClickDailyBtn}>일 별</Button>
+          {/* <Button onClick={onClickMonthlyBtn}>월 별</Button>
+          <Button onClick={onClickDailyBtn}>일 별</Button> */}
         </>
       )}
       <EChartsStyle
