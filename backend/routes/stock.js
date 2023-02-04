@@ -56,7 +56,6 @@ router.get("/", async (req, res) => {
   try {
     const URL = `https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo?serviceKey=${process.env.STOCK_API_KEY}&mrktCls=KOSPI&pageNo=1&resultType=json&likeSrtnCd=${SHORTCODE}&beginBasDt=${BASE_DT}&numOfRows=${ROWS}`;
     //${STOCKAPI.ITMS_NM}${NAME}
-    console.log("url: ", URL);
     const response = await axios.get(URL);
     // res.status(201).send(response.data.response.body.items.item);
 
