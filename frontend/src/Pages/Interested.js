@@ -1,4 +1,4 @@
-import react from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Flex from "../Components/common/Flex";
@@ -46,6 +46,15 @@ const Content = styled.span`
   }
 `;
 
+const PortfolioNameInput = styled.input`
+  color: ${({ theme }) => theme.palette.BLUE};
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  padding-left: 0;
+`;
+
 const DetailWrapper = styled(Flex)`
   width: 50%;
 `;
@@ -69,9 +78,28 @@ const PieChart = styled.div`
   ); /* 차트 비율 설정 */
   position: relative;
 
+  &:hover {
+    cursor: pointer;
+    // after의 사이즈 줄이기
+    &::after {
+      width: 60%;
+      height: 60%;
+      transition: 0.5s;
+    }
+
+    // background conic-gradient에 text넣기
+    background: conic-gradient(
+        ${({ theme }) => theme.palette.BRIGHT_BLUE} 0%,
+        120deg,
+        ${({ theme }) => theme.palette.BLUE} 50deg
+      )
+      ${({ theme }) => theme.palette.BLUE};
+  }
+
   &::after {
     content: "6,080,000 원";
     position: absolute;
+    transition: 0.5s;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -110,6 +138,10 @@ const LeftBrightBlueBar = styled.div`
 
 const Interested = () => {
   const { me } = useSelector((state) => state.user);
+  const [portfolioTitle, setPortfolioTitle] = useState({
+    title: "내 우아한 포트폴리오",
+    isChangeMode: false,
+  });
 
   return (
     <div>
@@ -125,7 +157,13 @@ const Interested = () => {
         <Flex>
           <DetailWrapper direction="column">
             <SubTitle>{me?.email ? me.email : "로그인 해주세요"}</SubTitle>
-            <Content>내 우아한 포트폴리오</Content>
+            <PortfolioNameInput
+              value={portfolioTitle.title}
+              onChange={(e) =>
+                setPortfolioTitle({ ...portfolioTitle, title: e.target.value })
+              }
+              maxLength="10"
+            ></PortfolioNameInput>
           </DetailWrapper>
           <DetailWrapper direction="column">
             <SubTitle>총 자산</SubTitle>
