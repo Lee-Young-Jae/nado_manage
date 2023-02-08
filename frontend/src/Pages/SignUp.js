@@ -39,7 +39,6 @@ const SignUpPage = () => {
 
   const onSubmitSignup = (e) => {
     e.preventDefault();
-    console.log(signupInfo);
     dispatch({
       type: USER_SIGNUP_REQUEST,
       data: {
